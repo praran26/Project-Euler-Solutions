@@ -16,7 +16,6 @@
 using namespace std;
 bool *mysieve=new bool[N+1];
 ll *eulerPhi = new ll[N+1];
-double *ans=new double[N+1];
 void primesieve() {
 	for(int i = 0; i <= N;++i) {
 		mysieve[i] = true;
@@ -43,26 +42,25 @@ void eulerSieve(){
 void solve(){
     primesieve();
     eulerSieve();
+    int mina=-1;
+    float minval=999999999;
     rep(i,2,N){
-        string num="";
+        int c[10]={0,0,0,0,0,0,0,0,0,0};
         int j=i;
-        while(j){
-            num.pb(j%10+'0');
-            j/=10;
+        int k=eulerPhi[i];
+        while(j){c[j%10]++;j/=10;}
+        while(k){c[k%10]--;k/=10;}
+        bool res=1;
+        rep(l,0,10)res&=(c[l]==0);
+        if(res){
+            float alpha=(i*1.0)/eulerPhi[i];
+            if(alpha<minval){
+                minval=alpha;
+                mina=i;
+            }
         }
-        string x="";
-        j=eulerPhi[i];
-        while(j){
-            x.pb(j%10+'0');
-            j/=10;
-        }
-        sort(all(x));
-        sort(all(num));
-        if(x!=num)ans[i]=999999999;
-        else ans[i]=(i*1.0)/eulerPhi[i];
     }
-    int pos=min_element(ans+2,ans+N)-ans;
-    cout<<pos;
+    cout<<mina;
 }
 
 
